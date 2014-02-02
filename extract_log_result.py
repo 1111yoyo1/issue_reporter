@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
-import os,sys,re
+import os,sys,re,time
+from splinter import Browser 
+import win32clipboard
+
+def findzip(location, filetype='.zip'):
+    filename = ''
+    if len(os.listdir(location)) == 1 :
+        return '1'
+    for files in os.listdir(location):
+        if files.endswith(filetype):
+            filename = files
+    return filename
 
 def getserial(filename):
     f=open(filename,'r')
@@ -139,25 +150,84 @@ def handlefiledir(filedir):
     result=''
     if filedir.endswith('\\') is False:
         filedir=filedir+'\\'    
-    for files in os.listdir(filedir):
+    zip_name=''
+    for files in os.listdir(filedir):    
         if os.path.isdir(filedir+files) is True and files != "Pass" :
             handlefiledir(filedir+files)
         if files.endswith('.log') is True and files.startswith('eclid') is False and files != '1.log':
             result=analysefile(filedir,files)
+            zip_name=files
             #file1=open(''+filedir+'/'+'1'+'.log','w')
             #file1.writelines(result)
             #file1.close()
-
-            import win32clipboard
             win32clipboard.OpenClipboard()
             win32clipboard.EmptyClipboard()
             win32clipboard.SetClipboardText(result)
             win32clipboard.CloseClipboard()
             print result
+    #print findzip(filedir, '.zip')
+    if findzip(filedir, '.zip') == '':
+        str_zip='7z a %s.zip %s\\* -x!*.zip -x!*.tmp' %(zip_name,filedir)
+        print str_zip
+        os.system(str_zip)
+        #os.system('7z a %s.zip %s/*.log -r' %(files,filedir))
+    raw_input('input any key to continue')
     return result
+
+def report_issue(filedir):
+    sleep_time=10000
+    with Browser() as browser: 
+        # Visit URL 
+        url = "http://jira.sandforce.com/secure/CreateIssue.jspa?pid=10020&issuetype=1&Create=Create" 
+        browser.visit(url) 
+
+        try:
+            browser.fill('summary', '[MP550]')
+        except:
+            browser.click_link_by_text('log in')
+            browser.fill('os_username','yoxu')
+            browser.fill('os_password','Lsi201312')
+            browser.check('os_cookie')
+            browser.find_by_name('login').first.click()
+
+
+        browser.fill('summary', '[MP550]')
+        browser.find_by_id('components-textarea').fill('Firmware')
+        #time.sleep(sleep_time)
+        browser.select('customfield_10210', 'MP5.5.0') #FL Project
+        browser.check('customfield_10172')             #Repeatable failure
+        #browser            #Assignee
+        #browser.find_by_id('---------------').select('jtan')
+        #browser.select('assignee', str(browser.find_option_by_text('Joe Tan').first.value))
+        browser.check('customfield_10022')             #Release
+        
+        browser.fill('environment', 'SSDT')
+        browser.check('customfield_10173')             #Interal Found
+
+        browser.select('customfield_10021','10042')    #Firmware
+        browser.select('customfield_10021:1','-1')     #None
+
+        browser.uncheck('customfield_10063')             #Uncheck Client
+
+        browser.choose('customfield_10064', 'B01')
+
+        browser.check('customfield_10185')             #ssdt
+        
+        win32clipboard.OpenClipboard()
+        result=win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        browser.fill('description',result )
+        str_zipname=findzip(filedir, '.zip')
+        browser.attach_file('tempFilename',filedir+'\\'+str_zipname )
+        
+        time.sleep(sleep_time)
     
 if __name__ == "__main__":
     #filedir=r'\\cn-vmhost01\Share\Document\SQA\PPRO\Kingston\Nightly\520_29324'
     filedir=os.getcwd()
+    #print "**********************"
+    #print findzip(filedir, '')
+    #print "**********************"
     handlefiledir(filedir)
-    input("Input any key to quit")
+    #report_issue(filedir)
+    #input("Input any key to quit")
