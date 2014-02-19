@@ -175,11 +175,16 @@ def handlefiledir(filedir):
 
 def mp540(browser):
         browser.fill('summary', '[MP540] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
-        browser.find_by_id('components-textarea').fill('Firmware')
 
-        #browser.find_by_id('versions-textarea').fill('5.4.0')
+        browser.find_by_id('components-textarea').fill('Firmware')
+        browser.find_by_css(".aui-list-item-link").first.click()
  
+
+        browser.find_by_id('versions-textarea').fill('5.4.0')
+        browser.find_by_css('.aui-list-item-li-5-4-0 > a:nth-child(1)').first.click()
+
         browser.select('customfield_10210', 'MP5.4.0')
+        browser.find_by_css(".aui-list-item-link").first.click()
 
         browser.check('customfield_10172')             #Repeatable failure
 
@@ -189,14 +194,18 @@ def mp540(browser):
         browser.check('customfield_10173')             #Interal Found
 
         browser.select('customfield_10021','10042')    #Firmware
-        browser.select('customfield_10021:1','-1')     #None
+        #browser.select('customfield_10021:1','-1')     #None
 
         #browser.uncheck('customfield_10063')             #Uncheck Client
         browser.find_by_id('customfield_10063-2').first.uncheck() #Uncheck Enterprise 
 
         browser.choose('customfield_10064', 'B02')
 
-        browser.find_by_value('jtan').first.click()    #Assignee
+        #browser.find_by_value('jtan').first.click()    #Assignee
+        
+        #browser.find_by_id('assignee-single-select').first.click() 
+        browser.find_by_id('assignee-field').fill('Lin Feng Chen')
+        browser.find_by_css(".aui-iconised-link").first.click()
 
         browser.check('customfield_10185')             #ssdt
 
@@ -204,10 +213,14 @@ def mp550(browser):
         browser.fill('summary', '[MP550] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
 
         browser.find_by_id('components-textarea').fill('Firmware')
+        browser.find_by_css(".aui-list-item-link").first.click()
+ 
+
 
         browser.find_by_id('versions-textarea').fill('E.A.4')
- 
-        browser.select('customfield_10210', 'MP5.5.0') #FL Project
+        browser.find_by_css('.aui-list-item-li-e-a-4 > a:nth-child(1)').first.click()
+
+        browser.select('customfield_10210', '11481')  #FL Project
 
         browser.check('customfield_10172')             #Repeatable failure
 
@@ -216,26 +229,63 @@ def mp550(browser):
         browser.fill('environment', 'SSDT')
         browser.check('customfield_10173')             #Interal Found
 
-        browser.select('customfield_10021','10042')    #Firmware
-        browser.select('customfield_10021:1','-1')     #None
+        browser.select('customfield_10021','10042')     #Firmware
+        #browser.select('customfield_10021:1','-1')     #None
 
         browser.find_by_id('customfield_10063-1').first.uncheck() #Uncheck Client 
         browser.uncheck('customfield_10063')             #Uncheck Client
 
-        browser.choose('customfield_10064', 'B01')
+       
 
-        browser.find_by_value('jtan').first.click()    #Assignee
+        browser.choose('customfield_10064', '10241') #B01
+        browser.check('customfield_10185')  #ssdt   
 
-        browser.check('customfield_10185')             #ssdt
+        browser.find_by_id('assignee-field').fill('Joe Tan')
+        browser.find_by_css(".aui-iconised-link").first.click()
+        
+def mp560(browser):
+
+        browser.fill('summary', '[MP560] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
+
+        browser.find_by_id('components-textarea').fill('Firmware') 
+        browser.find_by_css(".aui-list-item-link").first.click()
+ 
+        browser.find_by_id('versions-textarea').fill('F.1.3')   #version        
+        browser.find_by_css('.aui-list-item-li-f-1-3 > a:nth-child(1)').first.click()
+
+        browser.select('customfield_10210', '11481')  #FL Project
+
+        browser.check('customfield_10172')             #Repeatable failure
+
+        browser.check('customfield_10022')             #Release
+        
+        browser.fill('environment', 'SSDT')
+        browser.check('customfield_10173')             #Interal Found
+
+        browser.select('customfield_10021','10042')     #Firmware
+        #browser.select('customfield_10021:1','-1')     #None
+
+        browser.find_by_id('customfield_10063-1').first.uncheck() #Uncheck Client 
+        browser.uncheck('customfield_10063')             #Uncheck Client
+
+        browser.choose('customfield_10064', '10241') #B01
+        browser.check('customfield_10185')  #ssdt   
+
+        browser.find_by_id('assignee-field').fill('Lin Feng Chen')
+        browser.find_by_css(".aui-iconised-link").first.click()
+                
 
 def asd(browser):
         browser.fill('summary', '[ASD] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
 
         browser.find_by_id('components-textarea').fill('Firmware')
+        browser.find_by_css(".aui-list-item-link").first.click()
 
-        browser.find_by_id('versions-textarea').fill('I.6.2')
+        browser.find_by_id('versions-textarea').fill('I.6.3')
+        browser.find_by_css('.aui-list-item-li-i-6-3 > a:nth-child(1)').first.click()
  
-        browser.select('customfield_10210', 'ASD/Oracle DLC') #FL Project
+        #browser.select('customfield_10210', 'ASD/Oracle DLC') #FL Project
+        browser.select('customfield_10210', '10733')
 
         browser.check('customfield_10172')             #Repeatable failure
 
@@ -245,14 +295,17 @@ def asd(browser):
         browser.check('customfield_10173')             #Interal Found
 
         browser.select('customfield_10021','10042')    #Firmware
-        browser.select('customfield_10021:1','-1')     #None
+        #browser.select('customfield_10021:1','-1')     #None
 
         browser.find_by_id('customfield_10063-1').first.uncheck() #Uncheck Client 
         browser.uncheck('customfield_10063')             #Uncheck Client
 
         browser.choose('customfield_10064', 'B01')
 
-        browser.find_by_value('mewei').first.click()    #Assignee
+        #browser.find_by_value('mewei').first.click()    #Assignee
+        #browser.find_by_id('assignee-single-select').first.click() 
+        browser.find_by_id('assignee-field').fill('Meng Wei')
+        browser.find_by_css(".aui-iconised-link").first.click()
 
         browser.check('customfield_10185')             #ssdt
 
@@ -269,7 +322,9 @@ def report_issue(filedir,zipname):
         #browser.cookies.all()
         #import cookielib
         #cj = cookielib.CookieJar()
-        url = "http://jira.sandforce.com/secure/CreateIssue.jspa?pid=10020&issuetype=1&Create=Create" 
+        
+        url = "http://jira.lsi.com/secure/CreateIssue.jspa?pid=10020&issuetype=1&Create=Create" 
+        #url = "http://jira.sandforce.com/secure/CreateIssue.jspa?pid=10020&issuetype=1&Create=Create" 
         browser.visit(url)
         # print cj
         # for c in cj:
@@ -288,6 +343,7 @@ def report_issue(filedir,zipname):
             browser.find_by_name('login').first.click()
 
         eval(sys.argv[1])(browser)
+        #eval('mp540')(browser)
         #mp550(browser)
         # #browser.fill('summary', '[MP550] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
         # browser.fill('summary', '[MP540] Test failed while running  %s' %getscriptname(filedir+'\\'+zipname))
@@ -332,6 +388,7 @@ def report_issue(filedir,zipname):
 if __name__ == "__main__":
     #filedir=r'\\cn-vmhost01\Share\Document\SQA\PPRO\Kingston\Nightly\520_29324'
     filedir=os.getcwd()
+    #filedir = r'\\cn-vmhost01.sandforce.com\Share\Document\SQA\PPRO\MP560\F13\nightly\25358\TestSetFeature'
     #zipname=''
     zipname=handlefiledir(filedir)
     report_issue(filedir,zipname)
